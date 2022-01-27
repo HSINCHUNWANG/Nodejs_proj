@@ -14,13 +14,28 @@ app.get('/a.html', (req, res)=>{
 app.use(express.static('public'));
 
 app.get('/', (req, res)=>{
-
     res.render('home', {name:'Shinder'});
+});
 
+app.get('/a/b', (req, res)=>{
+    res.render('home', {name:'Shinder'});
 });
 
 
+app.get('/json-sales', (req, res)=>{
+    // req.query.orderByCol=age
+    // req.query.orderByRule=desc
 
+    const sales = require('./data/sales');  // 進來變成陣列
+    // TODO: 排序
+    console.log(sales);
+    res.render('json-sales', {sales});
+    
+});
+
+app.get('/try-qs', (req, res)=>{
+    res.json(req.query);
+});
 
 
 
