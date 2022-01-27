@@ -11,7 +11,12 @@ app.get('/a.html', (req, res)=>{
     res.send(`<h2>動態內容</h2><p>${Math.random()}</p>`);
 });
 */
+
+// Top-level middleware
+app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'));
+
+
 
 app.get('/', (req, res)=>{
     res.render('home', {name:'Shinder'});
@@ -37,10 +42,11 @@ app.get('/try-qs', (req, res)=>{
     res.json(req.query);
 });
 
-const urlencodedParser = express.urlencoded({extended: false});
-app.post('/try-post', urlencodedParser, (req, res)=>{
+
+app.post('/try-post', (req, res)=>{
     res.json(req.body);
 });
+
 
 
 // ********** 所有路由的後面
