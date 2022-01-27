@@ -14,6 +14,7 @@ app.get('/a.html', (req, res)=>{
 
 // Top-level middleware
 app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 app.use(express.static('public'));
 
 
@@ -46,7 +47,6 @@ app.get('/try-qs', (req, res)=>{
 app.post('/try-post', (req, res)=>{
     res.json(req.body);
 });
-
 
 
 // ********** 所有路由的後面
