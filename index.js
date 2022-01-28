@@ -3,7 +3,8 @@ console.log(process.env.NODE_ENV);
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
-const upload = multer({dest: 'tmp_uploads/'});
+// const upload = multer({dest: 'tmp_uploads/'});
+const upload = require(__dirname + '/modules/upload-imgs');
 const fs = require('fs').promises;
 
 const app = express();
@@ -59,17 +60,26 @@ app.post('/try-post-form', (req, res)=>{
 });
 
 app.post('/try-upload', upload.single('avatar'), async (req, res)=>{
-    //res.json(req.body);
+    res.json(req.file);
+    /*
     const types = ['image/jpeg', 'image/png'];
     const f = req.file;
     if(f && f.originalname){
         if(types.includes(f.mimetype)){
             await fs.rename(f.path, __dirname + '/public/img/' + f.originalname);
             return res.redirect('/img/' + f.originalname);
+        } else {
+            return res.send('檔案類型不符');
         }
-
     }
     res.send('bad');
+    */
+});
+
+app.get('/aa', (req, res)=>{
+    // 錯誤的作法
+    res.send('aaa');
+    res.send('bbb');
 });
 
 // ********** 所有路由的後面
