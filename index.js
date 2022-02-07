@@ -108,7 +108,7 @@ app.get(['/xxx', '/yyy'], (req, res)=>{
 });
 
 app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res)=>{
-    let u = req.url;
+    let u = req.url.split('?')[0];
     u = u.slice(3);
     
     // 用空字串取代掉所有的 -
@@ -116,6 +116,8 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res)=>{
 
     res.json({mobile: u});
 });
+
+app.use( require('./routes/admin2') );
 
 
 // ********** 所有路由的後面
