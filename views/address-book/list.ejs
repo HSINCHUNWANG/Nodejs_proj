@@ -8,7 +8,8 @@
               <li class="page-item <%= page===1 ? 'disabled' : '' %>">
                   <a class="page-link" href="?page=<%= page-1 %>">Previous</a>
                 </li>
-              <% for(let i=1; i<= totalPages; i++){ %>
+                <% for(i=page-2; i<= page+2; i++)
+                  if (i>=1 && i<=totalPages){ %>
               <li class="page-item <%= page===i ? 'active' : '' %>">
                   <a class="page-link" href="?page=<%= i %>"><%= i %></a>
                 </li>
@@ -52,10 +53,10 @@
 </div>
 
 <%- include('../parts/scripts') %> 
-<script>
-    const locals = <%- JSON.stringify(locals) %>;
+<!-- <script>
+    const locals = <%- JSON.stringify(locals) %>; //除錯
 
-</script>
+</script> -->
 
 
 <%- include('../parts/html-foot') %>
