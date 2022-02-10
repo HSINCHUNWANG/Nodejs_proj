@@ -109,7 +109,7 @@ router.post('/add', async (req, res)=>{
     res.json(output);
 });
 router.get('/delete/:sid', async (req, res)=>{
-    const sql = "DELETE FROM address_book WHERE SID=?";
+    const sql = "DELETE FROM address_book WHERE sid=?";
     const [result] = await db.query(sql, [req.params.sid]);
     res.redirect('/address-book/list');
 });
