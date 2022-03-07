@@ -12,7 +12,7 @@
         b = 10;
 
       function f(...ar) {
-        console.log(ar);
+        console.log(JSON.stringify(ar));
       }
       f("c");
       f`${a}xxx${a}yyy${b}zzz`;
