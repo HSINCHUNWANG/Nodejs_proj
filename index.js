@@ -14,6 +14,8 @@ const sessionStore = new MysqlStore({}, db);
 const cors = require('cors');
 const fetch = require('node-fetch');
 const axios = require('axios');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -196,6 +198,48 @@ app.get('/yahoo2', async (req, res)=>{
     const response = await axios.get('https://tw.yahoo.com/');
     console.log(response);
     res.send(response.data);
+
+});
+
+// 登入的表單
+app.get('/login', async (req, res)=>{
+    res.render('login');
+});
+// 檢查登入帳密
+app.post('/login', async (req, res)=>{
+
+    const output = {
+        success: false,
+        error: '',
+        info: null,
+        token: '',
+        code: 0,
+    };
+
+    const [rs] = await db.query('SELECT * FROM admins WHERE account=?', [req.body.account]);
+
+    if(! rs.length){
+        output.error = '帳密錯誤';
+        output.code = 401;
+        return res.json(output);
+    }
+    const row = rs[0];
+
+    const compareResult = await bcrypt.compare(req.body.password, row.password);
+    if(! compareResult){
+        output.error = '帳密錯誤';
+        output.code = 402;
+        return res.json(output);
+    }
+    
+    const {sid, account, avatar, nickname} = row;
+    output.success = true;
+    output.info = {account, avatar, nickname};
+
+    output.token = jwt.sign({sid, account}, process.env.JWT_KEY);
+
+
+    res.json(output);
 
 });
 
