@@ -1,4 +1,8 @@
 const express = require('express');
+const req = require('express/lib/request');
+const res = require('express/lib/response');
+const db = require('./../modules/connect-db');
+const upload = require('./../modules/upload-imgs');
 
 const router = express.Router();
 
@@ -6,6 +10,28 @@ const router = express.Router();
 router.use((req, res, next)=>{
     res.locals.shin += ' admin2';
     next();
+});
+
+
+router.get('/myform/:sid', async (req, res)=>{
+    const sid = parseInt(req.params.sid) || 0;
+    const [rs] = await db.query(`SELECT account,avatar,nickname FROM admins WHERE sid=${sid}`);
+
+    res.json(rs);
+});
+router.put('/myform/:sid', upload.single('avatar'), async (req, res)=>{
+    // return res.json(req.body);
+    let modifyAvatar = '';
+    if(req.file && req.file.filename){
+        modifyAvatar = ` , avatar='${req.file.filename}' `;
+    };
+
+    const sql = `UPDATE admins SET nickname=? ${modifyAvatar} WHERE sid=? `;
+
+    const result = await db.query(sql, [req.body.nickname, req.params.sid ]);
+
+    res.json(result);
+
 });
 
 router.get('/', (req, res)=>{
